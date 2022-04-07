@@ -2,7 +2,8 @@ import unittest
 from TripService import TripService
 from UserNotLoggedInException import UserNotLoggedInException
 from DependendClassCallDuringUnitTestException import DependendClassCallDuringUnitTestException
-from tripservice import User
+from User import User
+from Trip import Trip
 
 
 class TestableTripService(TripService):
@@ -14,7 +15,8 @@ class TestableTripService(TripService):
         return self.logged_state
 
     def find_trip_by_user(self, user):
-        return user.getFriends()
+        return user.get_trips()
+
 
 class TripServiceTest(unittest.TestCase):
 
@@ -43,6 +45,7 @@ class TripServiceTest(unittest.TestCase):
 
         friend = User()
         friend.addFriend(self.LOGGED_USER)
+        friend.addTrip(Trip())
 
         self.assertEqual(len(trip_service.getTripsByUser(friend)), 1)
 
@@ -53,9 +56,9 @@ class TripServiceTest(unittest.TestCase):
         friend.addFriend(self.LOGGED_USER)
 
         for i in range(4):
-            friend.addFriend(User())
+            friend.addTrip(Trip())
 
-        self.assertEqual(len(trip_service.getTripsByUser(friend)), 5)
+        self.assertEqual(len(trip_service.getTripsByUser(friend)), 4)
 
 
 if __name__ == "__main__":

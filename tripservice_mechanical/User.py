@@ -20,4 +20,4 @@ class User:
         return self.trips
 
     def is_friend_with(self, user):
-        return any(friend is self for friend in user.getFriends())
+        return self in user.getFriends()

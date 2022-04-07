@@ -7,4 +7,4 @@ class TripDAO:
         raise DependendClassCallDuringUnitTestException("TripDAO should not be invoked on an unit test.")
 
     def find_trip(self, user):
-        return self.findTripsByUser(user)
+        raise DependendClassCallDuringUnitTestException("TripDAO should not be invoked on an unit test.")

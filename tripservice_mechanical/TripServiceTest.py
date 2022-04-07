@@ -35,7 +35,7 @@ class TripServiceTest(unittest.TestCase):
         trip_service = TripService(self.tripDAO)
         friend = UserBuilder.aUser().friends_with(self.LOGGED_USER).with_trips().build()
 
-        self.tripDAO.findTripsByUser.return_value = friend.get_trips()
+        self.tripDAO.find_trip.return_value = friend.get_trips()
 
         self.assertEqual(len(trip_service.getTripsByUser(friend, self.LOGGED_USER)), 0)
 
@@ -43,7 +43,7 @@ class TripServiceTest(unittest.TestCase):
         trip_service = TripService(self.tripDAO)
         friend = UserBuilder.aUser().friends_with(self.LOGGED_USER).with_trips(Trip()).build()
 
-        self.tripDAO.findTripsByUser.return_value = friend.get_trips()
+        self.tripDAO.find_trip.return_value = friend.get_trips()
 
         self.assertEqual(len(trip_service.getTripsByUser(friend, self.LOGGED_USER)), 1)
 
@@ -55,7 +55,7 @@ class TripServiceTest(unittest.TestCase):
             .with_trips(Trip(), Trip(), Trip(), Trip()) \
             .build()
 
-        self.tripDAO.findTripsByUser.return_value = friend.get_trips()
+        self.tripDAO.find_trip.return_value = friend.get_trips()
 
         self.assertEqual(len(trip_service.getTripsByUser(friend, self.LOGGED_USER)), 4)
 

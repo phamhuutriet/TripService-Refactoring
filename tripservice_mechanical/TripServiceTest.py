@@ -11,9 +11,6 @@ class TestableTripService(TripService):
         super().__init__()
         self.logged_state = logged_state
 
-    def get_logged_user(self):
-        return self.logged_state
-
     def find_trip_by_user(self, user):
         return user.get_trips()
 

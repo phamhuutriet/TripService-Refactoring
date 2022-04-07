@@ -13,6 +13,8 @@ class TestableTripService(TripService):
     def get_logged_user(self):
         return self.logged_state
 
+    def find_trip_by_user(self, user):
+        return user.getFriends()
 
 class TripServiceTest(unittest.TestCase):
 
@@ -28,13 +30,32 @@ class TripServiceTest(unittest.TestCase):
         with self.assertRaises(UserNotLoggedInException):
             trip_service.getTripsByUser(self.ANOTHER_USER)
 
-    def test_should_return_empty_trip_list_if_user_dont_have_friend(self):
+    def test_should_return_empty_trip_list_if_user_not_friend_with_logged_user(self):
         trip_service = TestableTripService(logged_state=self.LOGGED_USER)
 
         friend = User()
         friend.addFriend(self.ANOTHER_USER)
 
         self.assertEqual(len(trip_service.getTripsByUser(friend)), 0)
+
+    def test_should_return_a_len_1_trip_list_if_user_is_friend_with_logged_user(self):
+        trip_service = TestableTripService(logged_state=self.LOGGED_USER)
+
+        friend = User()
+        friend.addFriend(self.LOGGED_USER)
+
+        self.assertEqual(len(trip_service.getTripsByUser(friend)), 1)
+
+    def test_should_return_a_len_5_trip_list_if_user_is_friend_with_logged_user(self):
+        trip_service = TestableTripService(logged_state=self.LOGGED_USER)
+
+        friend = User()
+        friend.addFriend(self.LOGGED_USER)
+
+        for i in range(4):
+            friend.addFriend(User())
+
+        self.assertEqual(len(trip_service.getTripsByUser(friend)), 5)
 
 
 if __name__ == "__main__":

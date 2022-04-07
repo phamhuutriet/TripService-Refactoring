@@ -14,10 +14,13 @@ class TripService:
                     isFriend = True
                     break
             if isFriend:
-                tripList = TripDAO.findTripsByUser(user)
+                tripList = self.find_trip_by_user(user)
             return tripList
         else:
             raise UserNotLoggedInException()
 
     def get_logged_user(self):
         return UserSession.getInstance().getLoggedUser()
+
+    def find_trip_by_user(self, user):
+        return TripDAO.findTripsByUser(user)

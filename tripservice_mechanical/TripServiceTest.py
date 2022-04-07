@@ -18,6 +18,38 @@ class TestableTripService(TripService):
         return user.get_trips()
 
 
+class UserBuilder():
+    def __init__(self):
+        self.friends = []
+        self.trips = []
+
+    @classmethod
+    def aUser(cls):
+        return UserBuilder()
+
+    def friends_with(self, *friends):
+        self.friends = friends
+        return self
+
+    def with_trips(self, *trips):
+        self.trips = trips
+        return self
+
+    def build(self):
+        new_user = User()
+        self.add_friends_to(new_user)
+        self.add_trips_to(new_user)
+        return new_user
+
+    def add_friends_to(self, new_user):
+        for friend in self.friends:
+            new_user.addFriend(friend)
+
+    def add_trips_to(self, new_user):
+        for trip in self.trips:
+            new_user.addTrip(trip)
+
+
 class TripServiceTest(unittest.TestCase):
 
     def __init__(self, methodName: str = ...) -> None:
@@ -35,28 +67,24 @@ class TripServiceTest(unittest.TestCase):
     def test_should_return_empty_trip_list_if_user_not_friend_with_logged_user(self):
         trip_service = TestableTripService(logged_state=self.LOGGED_USER)
 
-        friend = User()
-        friend.addFriend(self.ANOTHER_USER)
+        friend = UserBuilder.aUser().friends_with(self.LOGGED_USER).with_trips().build()
 
         self.assertEqual(len(trip_service.getTripsByUser(friend)), 0)
 
     def test_should_return_a_len_1_trip_list_if_user_is_friend_with_logged_user(self):
         trip_service = TestableTripService(logged_state=self.LOGGED_USER)
 
-        friend = User()
-        friend.addFriend(self.LOGGED_USER)
-        friend.addTrip(Trip())
+        friend = UserBuilder.aUser().friends_with(self.LOGGED_USER).with_trips(Trip()).build()
 
         self.assertEqual(len(trip_service.getTripsByUser(friend)), 1)
 
     def test_should_return_a_len_5_trip_list_if_user_is_friend_with_logged_user(self):
         trip_service = TestableTripService(logged_state=self.LOGGED_USER)
 
-        friend = User()
-        friend.addFriend(self.LOGGED_USER)
-
-        for i in range(4):
-            friend.addTrip(Trip())
+        friend = UserBuilder.aUser()\
+            .friends_with(self.LOGGED_USER)\
+            .with_trips(Trip(), Trip(), Trip(), Trip())\
+            .build()
 
         self.assertEqual(len(trip_service.getTripsByUser(friend)), 4)
 

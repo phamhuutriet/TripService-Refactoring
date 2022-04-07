@@ -56,6 +56,12 @@ class TripServiceTest(unittest.TestCase):
 
         self.assertEqual(len(trip_service.getTripsByUser(friend)), 4)
 
+    def test_is_friend_with(self):
+        user_a = User()
+        user_b = UserBuilder.aUser().friends_with(user_a).build()
+
+        self.assertEqual(user_a.is_friend_with(user_b), True)
+
 
 if __name__ == "__main__":
     unittest.main()

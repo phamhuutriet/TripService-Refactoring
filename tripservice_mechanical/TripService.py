@@ -9,10 +9,7 @@ class TripService:
         isFriend = False
         tripList = []
         if logged_user:
-            for friend in user.getFriends():
-                if friend is logged_user:
-                    isFriend = True
-                    break
+            isFriend = self.is_friend(user, logged_user)
             if isFriend:
                 tripList = self.find_trip_by_user(user)
             return tripList
@@ -24,3 +21,6 @@ class TripService:
 
     def find_trip_by_user(self, user):
         return TripDAO.findTripsByUser(user)
+
+    def is_friend(self, user, logged_user):
+        return any(friend is logged_user for friend in user.getFriends())

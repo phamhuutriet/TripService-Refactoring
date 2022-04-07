@@ -1,9 +1,9 @@
 import unittest
 from TripService import TripService
 from UserNotLoggedInException import UserNotLoggedInException
-from DependendClassCallDuringUnitTestException import DependendClassCallDuringUnitTestException
 from User import User
 from Trip import Trip
+from tripservice_mechanical.UserBuilder import UserBuilder
 
 
 class TestableTripService(TripService):
@@ -16,38 +16,6 @@ class TestableTripService(TripService):
 
     def find_trip_by_user(self, user):
         return user.get_trips()
-
-
-class UserBuilder():
-    def __init__(self):
-        self.friends = []
-        self.trips = []
-
-    @classmethod
-    def aUser(cls):
-        return UserBuilder()
-
-    def friends_with(self, *friends):
-        self.friends = friends
-        return self
-
-    def with_trips(self, *trips):
-        self.trips = trips
-        return self
-
-    def build(self):
-        new_user = User()
-        self.add_friends_to(new_user)
-        self.add_trips_to(new_user)
-        return new_user
-
-    def add_friends_to(self, new_user):
-        for friend in self.friends:
-            new_user.addFriend(friend)
-
-    def add_trips_to(self, new_user):
-        for trip in self.trips:
-            new_user.addTrip(trip)
 
 
 class TripServiceTest(unittest.TestCase):
